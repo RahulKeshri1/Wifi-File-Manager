@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+    <title>WiFi File Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="user-info">
+    Logged in as: {{ session['username'] }} | <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+<h2>📁 Directory: {{ rel_path or '/' }}</h2>
+
+<form id="uploadForm" method="post" enctype="multipart/form-data">
+    <div class="upload-area" id="uploadArea">
+        Drag & Drop files here or click to upload
+        <div class="file-list" id="fileList"></div>
+        <div class="progress-bar-container" id="progressBarContainer">
+            <div class="progress-bar">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+            <span id="progressText">0%</span>
+        </div>
+    </div>
+    <input type="file" name="files" id="fileInput" multiple style="display:none">
+    <input type="submit" value="Upload">
+</form>
+
+<br>
+<form method="post" action="{{ url_for('create_folder', subpath=rel_path) }}">
+    <input type="text" name="folder_name" placeholder="New Folder Name" required>
+    <input type="submit" value="Create Folder">
+</form>
+
+{% if message %}<p style="color:red;">{{ message }}</p>{% endif %}
+
+<ul>
+    {% if rel_path %}
+    <li><a href="{{ url_for('browse', subpath=parent_path) }}">⬅️ Go Back</a></li>
+    {% endif %}
+    {% for name in folders %}
+        <li>📁 <a href="{{ url_for('browse', subpath=os.path.join(rel_path, name)) }}">{{ name }}</a></li>
+    {% endfor %}
+</ul>
+<div class="file-preview">
+    {% for file in files %}
+        <div style="margin-bottom: 10px;">
+            {% if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')) %}
+                <img src="{{ url_for('download_file', subpath=os.path.join(rel_path, file)) }}" alt="{{ file }}">
+            {% elif file.lower().endswith(('.mp4', '.webm')) %}
+                <video controls>
+                    <source src="{{ url_for('download_file', subpath=os.path.join(rel_path, file)) }}" type="video/mp4">
+                </video>
+            {% else %}
+                <img class="file-icon" src="" data-filename="{{ file }}" alt="{{ file }} icon">
+            {% endif %}
+            <br>
+            <a href="{{ url_for('download_file', subpath=os.path.join(rel_path, file)) }}">📄 {{ file }}</a>
+            <form method="post" action="{{ url_for('delete_file', subpath=os.path.join(rel_path, file)) }}" style="display:inline;">
+                <button type="submit">🗑️ Delete</button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    const fileIconMap = {
+        'pdf': 'https://img.icons8.com/color/48/000000/pdf.png',
+        'odt': 'https://img.icons8.com/color/48/000000/open-document.png',
+        'ppt': 'https://img.icons8.com/color/48/000000/powerpoint.png',
+        'pptx': 'https://img.icons8.com/color/48/000000/powerpoint.png',
+        'doc': 'https://img.icons8.com/color/48/000000/word.png',
+        'docx': 'https://img.icons8.com/color/48/000000/word.png',
+        'txt': 'https://img.icons8.com/color/48/000000/text-file.png',
+        'default': 'https://img.icons8.com/color/48/000000/file.png'
+    };
+
+    function getFileIcon(filename, mimeType) {
+        const ext = filename.split('.').pop().toLowerCase();
+        return fileIconMap[ext] || fileIconMap['default'];
+    }
+
+    // Set icons for file list
+    document.querySelectorAll('.file-icon').forEach(icon => {
+        const filename = icon.getAttribute('data-filename');
+        icon.src = getFileIcon(filename);
+    });
+
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const uploadForm = document.getElementById('uploadForm');
+    const progressBarContainer = document.getElementById('progressBarContainer');
+    const progressBarFill = document.getElementById('progressBarFill');
+    const progressText = document.getElementById('progressText');
+
+    function displayFiles(files) {
+        fileList.innerHTML = '';
+        Array.from(files).forEach(file => {
+            const div = document.createElement('div');
+            if (file.type.startsWith('image/') && ['image/png', 'image/jpeg', 'image/gif'].includes(file.type)) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    div.appendChild(img);
+                    div.appendChild(document.createTextNode(file.name));
+                    fileList.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                const img = document.createElement('img');
+                img.className = 'file-icon';
+                img.src = getFileIcon(file.name, file.type);
+                div.appendChild(img);
+                div.appendChild(document.createTextNode(file.name));
+                fileList.appendChild(div);
+            }
+        });
+    }
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        fileInput.files = e.dataTransfer.files;
+        displayFiles(fileInput.files);
+    });
+
+    fileInput.addEventListener('change', () => {
+        displayFiles(fileInput.files);
+    });
+
+    uploadForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(uploadForm);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', uploadForm.action, true);
+
+        xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const percent = (event.loaded / event.total) * 100;
+                progressBarFill.style.width = percent + '%';
+                progressText.textContent = Math.round(percent) + '%';
+                progressBarContainer.style.display = 'block';
+            }
+        };
+
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                window.location.href = uploadForm.action;
+            } else {
+                alert('Upload failed');
+                progressBarContainer.style.display = 'none';
+            }
+        };
+
+        xhr.send(formData);
+    });
+</script>
+</body>
+</html>
