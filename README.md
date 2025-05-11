@@ -38,8 +38,8 @@ Follow these steps to set up and run the application:
 - Ubuntu, Windows, or macOS with network access
 
 ### **2️⃣ Clone the Repository**
-     git clone https://github.com/RahulKeshri1/WiFi_File_Sharing.git
-     cd WiFi_File_Sharing
+     git clone https://github.com/RahulKeshri1/WiFi-File-Sharing.git
+     cd WiFi-File-Sharing
 
 ### **3️⃣ Create a Virtual Environment**
      python3 -m venv venv
@@ -146,7 +146,7 @@ For production deployment:
 
 ## **📂 Project Structure**
      
-     WiFi_File_Sharing/
+     WiFi-File-Sharing/
      ├── .gitignore          # Ignored files (e.g., activity.log, venv/)
      ├── LICENSE             # MIT License
      ├── README.md           # Project documentation
