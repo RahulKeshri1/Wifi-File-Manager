@@ -1,4 +1,4 @@
-BASE_DIR = r'/home/rahul'
+BASE_DIR = r'Directory Path you want to share'
 USERS = {
     'admin': 'admin123',
     'user1': 'password1',
