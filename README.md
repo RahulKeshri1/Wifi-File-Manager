@@ -38,75 +38,58 @@ Follow these steps to set up and run the application:
 - Ubuntu, Windows, or macOS with network access
 
 ### **2️⃣ Clone the Repository**
-     ```bash
      git clone https://github.com/RahulKeshri1/WiFi_File_Sharing.git
      cd WiFi_File_Sharing
 
 ### **3️⃣ Create a Virtual Environment**
-     ```bash
      python3 -m venv venv
      source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 ### **4️⃣ Install Dependencies**
-     ```bash
      pip install -r requirements.txt
 
 ### **5️⃣ Configure BASE_DIR**
 
-Edit config.py to set BASE_DIR to a writable directory:
-
-- **Ubuntu:** BASE_DIR = r'/home/rahul/Files'
-- **macOS:** BASE_DIR = r'/Users/rahul/Files'
-- **Windows:** BASE_DIR = r'C:\Users\Rahul\Documents\Files'
-
+- Edit `config.py` to set `BASE_DIR` to a writable directory:
+     - **Ubuntu:** `BASE_DIR` =     `r'/home/rahul/Files'`
+     - **macOS:** `BASE_DIR` = `r'/Users/rahul/Files'`
+     - **Windows:** `BASE_DIR` = `r'C:\Users\Rahul\Documents\Files'`
 
 
-**Create the directory:**
-     ```bash
+
+- **Create the directory:**
+    ```
      mkdir /home/rahul/Files  # Adjust for your system
      chmod u+rwx /home/rahul/Files  # Ubuntu/macOS only
-
 ### **6️⃣ Run the Application**
 
-**Ubuntu/macOS (Production)**
-     ```bash
+- **Ubuntu/macOS (Production)**
+     ```
      gunicorn -w 4 -b 0.0.0.0:5000 --timeout 1800 app:app
-
-Allow port 5000:
-     ```bash
+- Allow port 5000:
+     ```
      sudo ufw allow 5000  # Ubuntu
-
-**Windows (Production)**
-     ```bash
+- **Windows (Production)**
+     ```
      waitress-serve --host=0.0.0.0 --port=5000 --call app:app
-
-Allow port 5000:
-     ```bash
+- Allow port 5000:
+     ```
      New-NetFirewallRule -DisplayName "WiFi File Manager" -Direction Inbound -Protocol TCP -LocalPort 5000 -Action Allow
-
-**Development Mode (All Platforms)**
-     ```bash
+- **Development Mode (All Platforms)**
+     ```
      python3 app.py
-
-
-
-
-
-**Note: The Flask development server is not recommended for 10 GB uploads.**
-
-
-
-Access the app at http://<your-ip>:5000 (e.g., http://192.168.29.68:5000).
+- **Note: The Flask development server is not recommended for 10 GB uploads.**
+- Access the app at http://`<your-ip>`:5000 (e.g., `http://192.168.29.68:5000`).
 
 ---
 
 ## **🔄 Usage**
 
-- Open the app in a browser (e.g., http://192.168.29.68:5000).
-- Log in with credentials (e.g., admin/admin123 from config.py).
+- Open the app in a browser (e.g., `http://192.168.29.68:5000`).
+- Log in with credentials (e.g., `admin`/`admin123` from `config.py`).
 - Upload files (up to 10 GB), download, create folders, or delete files using drag-and-drop or file selection.
 - Monitor uploads via the real-time progress bar.
-- Check activity logs in activity.log.
+- Check activity logs in `activity.log`.
 
 ---
 
@@ -115,27 +98,20 @@ Access the app at http://<your-ip>:5000 (e.g., http://192.168.29.68:5000).
 For production deployment:
 
 - **Ubuntu/macOS: Use Gunicorn:**
-     ```bash
+     ```
      gunicorn -w 4 -b 0.0.0.0:5000 --timeout 1800 app:app
-
-
 - **Windows: Use Waitress:**
-     ```bash
+     ```
      waitress-serve --host=0.0.0.0 --port=5000 --call app:app
-
-
 - **For enhanced performance, consider adding Nginx as a reverse proxy (see Nginx Setup).**
 
 **Nginx Setup (Optional)**
 - Install Nginx:
-     ```bash
+     ```
      sudo apt-get install nginx  # Ubuntu
      brew install nginx  # macOS
-
-
-
 - Configure /etc/nginx/sites-available/wifi_file_manager:
-     ```bash
+     ```
      server {
          listen 80;
          server_name <your-ip>;
@@ -150,16 +126,12 @@ For production deployment:
              proxy_send_timeout 1800;
          }
      }
-
-
-
 - **Enable and start Nginx:**
-     ```bash
+     ```
      sudo ln -s /etc/nginx/sites-available/wifi_file_manager /etc/nginx/sites-enabled
      sudo nginx -t
      sudo systemctl restart nginx
-
-- Access at http://<your-ip>.
+- Access at http://`<your-ip>`.
 
 ---
 
@@ -173,7 +145,7 @@ For production deployment:
 ---
 
 ## **📂 Project Structure**
-     ```bash
+     
      WiFi_File_Sharing/
      ├── .gitignore          # Ignored files (e.g., activity.log, venv/)
      ├── LICENSE             # MIT License
@@ -198,15 +170,15 @@ We welcome contributions to improve Wifi_File_Share. Follow these steps to contr
 
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix:
-    ```bash
+    `bash
     git checkout -b feature/your-feature-name
 
 3. Commit your changes:
-    ```bash
+    `bash
     git commit -m "Add your message here" 
 
 4. Push your branch:
-    ```bash
+    `bash
     git push origin feature/your-feature-name
 
 5. Open a pull request
@@ -221,6 +193,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## **📧 Contact**
 
-Rahul Kumar Keshri
-rahulkumarkeshri475@gmail.com
-GitHub
+Rahul Kumar Keshri<br>
+[rahulkumarkeshri475@gmail.com](mailto:rahulkumarkeshri475@gmail.com) <br>
+[GitHub](https://github.com/RahulKeshri1)
