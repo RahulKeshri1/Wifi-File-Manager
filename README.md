@@ -38,8 +38,8 @@ Follow these steps to set up and run the application:
 - Ubuntu, Windows, or macOS with network access
 
 ### **2️⃣ Clone the Repository**
-     git clone https://github.com/RahulKeshri1/WiFi-File-Sharing.git
-     cd WiFi-File-Sharing
+     git clone https://github.com/RahulKeshri1/WiFi-File-Manager.git
+     cd WiFi-File-Manager
 
 ### **3️⃣ Create a Virtual Environment**
      python3 -m venv venv
@@ -110,7 +110,7 @@ For production deployment:
      ```
      sudo apt-get install nginx  # Ubuntu
      brew install nginx  # macOS
-- Configure /etc/nginx/sites-available/wifi-file-sharing:
+- Configure /etc/nginx/sites-available/wifi-file-manager:
      ```
      server {
          listen 80;
@@ -128,7 +128,7 @@ For production deployment:
      }
 - **Enable and start Nginx:**
      ```
-     sudo ln -s /etc/nginx/sites-available/wifi-file-sharing /etc/nginx/sites-enabled
+     sudo ln -s /etc/nginx/sites-available/wifi-file-manager /etc/nginx/sites-enabled
      sudo nginx -t
      sudo systemctl restart nginx
 - Access at http://`<your-ip>`.
@@ -146,7 +146,7 @@ For production deployment:
 
 ## **📂 Project Structure**
      
-     WiFi-File-Sharing/
+     WiFi-File-Manager/
      ├── .gitignore          # Ignored files (e.g., activity.log, venv/)
      ├── LICENSE             # MIT License
      ├── README.md           # Project documentation
@@ -166,7 +166,7 @@ For production deployment:
 
 ## **🤝 Contributing**
 
-We welcome contributions to improve wifi-file-Sharing. Follow these steps to contribute:
+We welcome contributions to improve wifi-file-Manager. Follow these steps to contribute:
 
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix:
