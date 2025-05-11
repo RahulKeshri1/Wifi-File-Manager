@@ -110,7 +110,7 @@ For production deployment:
      ```
      sudo apt-get install nginx  # Ubuntu
      brew install nginx  # macOS
-- Configure /etc/nginx/sites-available/wifi_file_manager:
+- Configure /etc/nginx/sites-available/wifi-file-sharing:
      ```
      server {
          listen 80;
@@ -128,7 +128,7 @@ For production deployment:
      }
 - **Enable and start Nginx:**
      ```
-     sudo ln -s /etc/nginx/sites-available/wifi_file_manager /etc/nginx/sites-enabled
+     sudo ln -s /etc/nginx/sites-available/wifi-file-sharing /etc/nginx/sites-enabled
      sudo nginx -t
      sudo systemctl restart nginx
 - Access at http://`<your-ip>`.
@@ -166,7 +166,7 @@ For production deployment:
 
 ## **🤝 Contributing**
 
-We welcome contributions to improve Wifi_File_Share. Follow these steps to contribute:
+We welcome contributions to improve wifi-file-Sharing. Follow these steps to contribute:
 
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix:
